@@ -139,7 +139,7 @@
           { label: "a)", image: "images/squares_question_answer_a.png" },
           { label: "b)", image: "images/squares_question_answer_b.png" },
           { label: "c)", image: "images/squares_question_answer_c.png" },
-          { label: "d) All of the above", image: null }
+          { label: "d) All of the above" }
         ],
         answer: "d) All of the above"
       }
@@ -198,17 +198,13 @@
       optionsEl.innerHTML = "";
       q.options.forEach(option => {
         const btn = document.createElement("button");
-        if (typeof option === 'object') {
-          if (option.image) {
-            btn.innerHTML = `
-              <div>
-                <img class="option-img" src="${option.image}" alt="${option.label}" />
-                <div>${option.label}</div>
-              </div>
-            `;
-          } else {
-            btn.textContent = option.label;
-          }
+        if (typeof option === 'object' && option.image) {
+          btn.innerHTML = `
+            <div>
+              <img class="option-img" src="${option.image}" alt="${option.label}" />
+              <div>${option.label}</div>
+            </div>
+          `;
           btn.dataset.value = option.label;
         } else {
           btn.textContent = option;
