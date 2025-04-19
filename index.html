@@ -217,7 +217,22 @@
       resultEl.innerHTML = output;
       resultEl.classList.remove("hidden");
     }
-
+  
+    function preloadImages() {
+      const imageUrls = [
+        "images/logo.png",
+        "images/squares_question.png",
+        "images/squares_question_answer_a.png",
+        "images/squares_question_answer_b.png",
+        "images/squares_question_answer_c.png"
+      ];
+      imageUrls.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
+    
+    preloadImages();
     showQuestion();
   </script>
 </body>
