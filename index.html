@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IQ Test - Festival 2025</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #dae2f8, #d6a4a4);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .logo {
+      max-width: 150px;
+      margin: 0 auto 1rem;
+      display: block;
+      border: none;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .question {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .options button {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .options button:hover {
+      background-color: #d6a4a4;
+      color: white;
+    }
+
+    #timer {
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #444;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .option-img {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .question-img {
+      max-width: 200px;
+      max-height: 200px;
+      display: block;
+      margin: 1rem auto;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="logo" src="images/logo.png" alt="Logo">
+    <h1>IQ Test - Festival 2025</h1>
+    <div id="quiz">
+      <div id="timer">Time left: 6s</div>
+      <div id="question"></div>
+      <div class="options" id="options"></div>
+    </div>
+    <div id="result" class="hidden"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "What is the next number? 2 - 6 - 12 - 20 - 30",
+        options: ["40", "42", "44", "46"],
+        answer: "42"
+      },
+      {
+        text: "If cat = 25, dog = 26, then fish = ?",
+        options: ["42", "36", "39", "44"],
+        answer: "42"
+      },
+      {
+        text: "Which of the following words is different from the rest?",
+        options: ["apple", "banana", "carrot", "grape"],
+        answer: "carrot"
+      },
+      {
+        text: "If 4 students play 2 games, how many games will 16 students play?",
+        options: ["9", "6", "3", "8"],
+        answer: "8"
+      },
+      {
+        text: "Which figure completes the pattern?",
+        image: "images/squares_question.png",
+        options: [
+          "<img class='option-img' src='images/squares_question_answer_a.png' alt='Option A'>",
+          "<img class='option-img' src='images/squares_question_answer_b.png' alt='Option B'>",
+          "<img class='option-img' src='images/squares_question_answer_c.png' alt='Option C'>",
+          "d) All of the above"
+        ],
+        answer: "d) All of the above"
+      }
+    ];
+
+    let current = 0;
+    let timer;
+    let seconds = 6;
+    const userAnswers = [];
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const timerEl = document.getElementById("timer");
+    const resultEl = document.getElementById("result");
+
+    function startTimer() {
+      seconds = 6;
+      timerEl.textContent = `Time left: ${seconds}s`;
+      timer = setInterval(() => {
+        seconds--;
+        timerEl.textContent = `Time left: ${seconds}s`;
+        if (seconds === 0) {
+          clearInterval(timer);
+          userAnswers.push(null);
+          nextQuestion();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      const q = questions[current];
+      questionEl.innerHTML = `<div class="question">${q.text}</div>`;
+      if (q.image) {
+        questionEl.innerHTML += `<img class='question-img' src="${q.image}" alt="Question image" />`;
+      }
+      optionsEl.innerHTML = "";
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerHTML = option;
+        btn.onclick = () => {
+          clearInterval(timer);
+          const cleanOption = btn.innerText || btn.textContent;
+          userAnswers.push(cleanOption);
+          nextQuestion();
+        };
+        optionsEl.appendChild(btn);
+      });
+      startTimer();
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById("quiz").classList.add("hidden");
+      let score = 0;
+      let output = "<h2>Results:</h2><ul>";
+      questions.forEach((q, i) => {
+        const user = userAnswers[i] || "(No answer)";
+        const correct = q.answer;
+        const correctText = user === correct ? "✅" : "❌";
+        if (user === correct) score++;
+        output += `<li>${q.text}<br>Your answer: ${user}<br>Correct answer: ${correct} ${correctText}</li><br>`;
+      });
+      output += `</ul><h3>Your score: ${score} / ${questions.length}</h3>`;
+      resultEl.innerHTML = output;
+      resultEl.classList.remove("hidden");
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
