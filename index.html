@@ -77,19 +77,12 @@
       display: none;
     }
 
-    img {
-      max-width: 100%;
-      border: 1px solid #ccc;
-      padding: 4px;
-      border-radius: 4px;
-    }
-
     .option-img {
       max-width: 100px;
       max-height: 100px;
       object-fit: contain;
       display: block;
-      margin: 0 auto;
+      margin: 0 auto 0.5rem;
     }
 
     .question-img {
@@ -139,10 +132,10 @@
         text: "Which figure completes the pattern?",
         image: "images/squares_question.png",
         options: [
-          "<img class='option-img' src='images/squares_question_answer_a.png' alt='Option A'>",
-          "<img class='option-img' src='images/squares_question_answer_b.png' alt='Option B'>",
-          "<img class='option-img' src='images/squares_question_answer_c.png' alt='Option C'>",
-          "d) All of the above"
+          { label: "a)", image: "images/squares_question_answer_a.png" },
+          { label: "b)", image: "images/squares_question_answer_b.png" },
+          { label: "c)", image: "images/squares_question_answer_c.png" },
+          { label: "d) All of the above" }
         ],
         answer: "d) All of the above"
       }
@@ -181,11 +174,21 @@
       optionsEl.innerHTML = "";
       q.options.forEach(option => {
         const btn = document.createElement("button");
-        btn.innerHTML = option;
+        if (typeof option === 'object' && option.image) {
+          btn.innerHTML = `
+            <div>
+              <img class="option-img" src="${option.image}" alt="${option.label}" />
+              <div>${option.label}</div>
+            </div>
+          `;
+          btn.dataset.value = option.label;
+        } else {
+          btn.textContent = option;
+          btn.dataset.value = option;
+        }
         btn.onclick = () => {
           clearInterval(timer);
-          const cleanOption = btn.innerText || btn.textContent;
-          userAnswers.push(cleanOption);
+          userAnswers.push(btn.dataset.value);
           nextQuestion();
         };
         optionsEl.appendChild(btn);
@@ -217,7 +220,7 @@
       resultEl.innerHTML = output;
       resultEl.classList.remove("hidden");
     }
-  
+
     function preloadImages() {
       const imageUrls = [
         "images/logo.png",
@@ -231,7 +234,7 @@
         img.src = src;
       });
     }
-    
+
     preloadImages();
     showQuestion();
   </script>
