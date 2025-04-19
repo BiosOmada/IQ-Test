@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IQ Test - Festival 2025</title>
+  <link rel="preload" href="images/logo.png" as="image">
   <style>
     body {
       margin: 0;
@@ -151,6 +152,26 @@
     const timerEl = document.getElementById("timer");
     const resultEl = document.getElementById("result");
 
+    function preloadImages(callback) {
+      const imageUrls = [
+        "images/logo.png",
+        "images/squares_question.png",
+        "images/squares_question_answer_a.png",
+        "images/squares_question_answer_b.png",
+        "images/squares_question_answer_c.png"
+      ];
+
+      let loaded = 0;
+      imageUrls.forEach(src => {
+        const img = new Image();
+        img.onload = img.onerror = () => {
+          loaded++;
+          if (loaded === imageUrls.length) callback();
+        };
+        img.src = src;
+      });
+    }
+
     function startTimer() {
       seconds = 6;
       timerEl.textContent = `Time left: ${seconds}s`;
@@ -221,22 +242,7 @@
       resultEl.classList.remove("hidden");
     }
 
-    function preloadImages() {
-      const imageUrls = [
-        "images/logo.png",
-        "images/squares_question.png",
-        "images/squares_question_answer_a.png",
-        "images/squares_question_answer_b.png",
-        "images/squares_question_answer_c.png"
-      ];
-      imageUrls.forEach(src => {
-        const img = new Image();
-        img.src = src;
-      });
-    }
-
-    preloadImages();
-    showQuestion();
+    preloadImages(showQuestion);
   </script>
 </body>
 </html>
