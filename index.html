@@ -99,7 +99,10 @@
   <div class="container">
     <img class="logo" src="images/logo.png" alt="Logo">
     <h1>IQ Test - Festival 2025</h1>
-    <div id="quiz">
+    <div id="start-screen">
+      <button id="start-button" style="padding: 1rem 2rem; font-size: 1.2rem; border-radius: 8px; background-color: #d6a4a4; color: white; border: none; cursor: pointer;">Start Quiz</button>
+    </div>
+    <div id="quiz" class="hidden">
       <div id="timer">Time left: 6s</div>
       <div id="question"></div>
       <div class="options" id="options"></div>
@@ -242,7 +245,13 @@
       resultEl.classList.remove("hidden");
     }
 
-    preloadImages(showQuestion);
+    preloadImages(() => {
+      document.getElementById("start-button").addEventListener("click", () => {
+        document.getElementById("start-screen").classList.add("hidden");
+        document.getElementById("quiz").classList.remove("hidden");
+        showQuestion();
+      });
+    });
   </script>
 <!-- Hidden preload of quiz images -->
   <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;">
