@@ -94,10 +94,14 @@
       object-fit: contain;
     }
 
-    .memory-grid {
-      font-size: 1.5rem;
-      line-height: 2rem;
-      white-space: pre;
+    .symbol-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      justify-items: center;
+      align-items: center;
+      font-size: 2rem;
+      margin: 1rem 0;
     }
   </style>
 </head>
@@ -148,12 +152,12 @@
         answer: "Perpetual"
       },
       {
-        text: `Visual Memory Challenge<br><strong>Study this 3×3 symbol grid for 15 seconds:</strong><br>
-          <div class="memory-grid">
-            ◐ ◑ ◒<br>
-            ◓ ◐ ◑<br>
-            ◒ ◓ ◐
-          </div>`,
+      text: `Visual Memory Challenge<br><strong>Study this 3×3 symbol grid for 15 seconds:</strong><br>
+        <div class="symbol-grid">
+          <div>◐</div><div>◑</div><div>◒</div>
+          <div>◓</div><div>◐</div><div>◑</div>
+          <div>◒</div><div>◓</div><div>◐</div>
+        </div>`,
         options: [],
         answer: null
       },
