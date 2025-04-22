@@ -152,12 +152,12 @@
         answer: "Perpetual"
       },
       {
-      text: `Visual Memory Challenge<br><strong>Study this 3×3 symbol grid for 15 seconds:</strong><br>
-        <div class="symbol-grid">
-          <div>◐</div><div>◑</div><div>◒</div>
-          <div>◓</div><div>◐</div><div>◑</div>
-          <div>◒</div><div>◓</div><div>◐</div>
-        </div>`,
+        text: `Visual Memory Challenge<br><strong>Study this 3×3 symbol grid for 15 seconds:</strong><br>
+          <div class="symbol-grid">
+            <div>◐</div><div>◑</div><div>◒</div>
+            <div>◓</div><div>◐</div><div>◑</div>
+            <div>◒</div><div>◓</div><div>◐</div>
+          </div>`,
         options: [],
         answer: null
       },
@@ -275,13 +275,14 @@
       let score = 0;
       let output = "<h2>Results:</h2><ul>";
       questions.forEach((q, i) => {
+        if (!q.answer) return; // Skip questions without answers (e.g., memory grid)
         const user = userAnswers[i] || "(No answer)";
         const correct = q.answer;
         const correctText = user === correct ? "✅" : "❌";
         if (user === correct) score++;
         output += `<li>${q.text}<br>Your answer: ${user}<br>Correct answer: ${correct} ${correctText}</li><br>`;
       });
-      output += `</ul><h3>Your score: ${score} / ${questions.length}</h3>`;
+      output += `</ul><h3>Your score: ${score} / ${questions.filter(q => q.answer).length}</h3>`;
       resultEl.innerHTML = output;
       resultEl.classList.remove("hidden");
     }
