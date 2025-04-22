@@ -94,7 +94,8 @@
       object-fit: contain;
     }
 
-    .symbol-grid {
+    .symbol-grid,
+    .triangle-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0.5rem;
@@ -172,9 +173,14 @@
         answer: "312211"
       },
       {
-        text: "Which symbol fills the blank?\n◢ | ◣ | ◤\n◥ | ? | ◢ \n◣ | ◤ | ◥",
-        options: ["◥", "◢", "◣"],
-        answer: "◥"
+        text: `Which symbol fills the blank?<br>
+        <div class="triangle-grid">
+          <div>◤</div><div>◥</div><div>◣</div>
+          <div>◢</div><div>?</div><div>◤</div>
+          <div>◣</div><div>◢</div><div>◥</div>
+        </div>`,
+        options: ["◣", "◢", "◥"],
+        answer: "◣"
       },
       {
         text: "From Q6’s grid, what symbol is at row 2, column 3?",
@@ -275,7 +281,7 @@
       let score = 0;
       let output = "<h2>Results:</h2><ul>";
       questions.forEach((q, i) => {
-        if (!q.answer) return; // Skip questions without answers (e.g., memory grid)
+        if (!q.answer) return;
         const user = userAnswers[i] || "(No answer)";
         const correct = q.answer;
         const correctText = user === correct ? "✅" : "❌";
