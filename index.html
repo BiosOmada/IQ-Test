@@ -93,6 +93,12 @@
       margin: 1rem auto;
       object-fit: contain;
     }
+
+    .memory-grid {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      white-space: pre;
+    }
   </style>
 </head>
 <body>
@@ -143,13 +149,12 @@
       },
       {
         text: `Visual Memory Challenge<br><strong>Study this 3×3 symbol grid for 15 seconds:</strong><br>
-          <div style="font-size: 1.5rem; line-height: 2rem;">
+          <div class="memory-grid">
             ◐ ◑ ◒<br>
             ◓ ◐ ◑<br>
             ◒ ◓ ◐
           </div>`,
         options: [],
-        image: "images/memory_grid_placeholder.png",
         answer: null
       },
       {
