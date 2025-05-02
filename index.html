@@ -30,9 +30,6 @@
       max-width: 150px;
       margin: 0 auto 1rem;
       display: block;
-      border: none;
-      padding: 0;
-      border-radius: 0;
     }
 
     .question {
@@ -111,87 +108,187 @@
     <img class="logo" src="images/logo.png" alt="Logo">
     <h1>IQ Test - Festival 2025</h1>
     <div id="start-screen">
-      <button id="start-button" style="padding: 1rem 2rem; font-size: 1.2rem; border-radius: 8px; background-color: #d6a4a4; color: white; border: none; cursor: pointer;">Start Quiz</button>
+      <button id="start-english" style="padding: 1rem 2rem; font-size: 1.2rem; border-radius: 8px; background-color: #d6a4a4; color: white; border: none; cursor: pointer; margin-bottom: 1rem;">
+        Start Quiz (English Version)
+      </button>
+      <button id="start-arabic" style="padding: 1rem 2rem; font-size: 1.2rem; border-radius: 8px; background-color: #a4bcd6; color: white; border: none; cursor: pointer;">
+        إبدأ الإختبار (النموذج العربي)
+      </button>
     </div>
+
     <div id="quiz" class="hidden">
       <div id="timer">Time left: 6s</div>
       <div id="question"></div>
       <div class="options" id="options"></div>
     </div>
+
     <div id="result" class="hidden"></div>
   </div>
 
   <script>
+    let language = "en";
+
     const questions = [
-      {
+    {
+        en: {
         text: "<strong>What is the next number</strong>:<br>2, 5, 10, 17, 26, ?",
         options: ["35", "37", "38"],
         answer: "37"
-      },
-      {
+        },
+        ar: {
+        text: "<strong>أكمل التسلسل:</strong><br>٢، ٥، ١٠، ١٧، ٢٦، ؟",
+        options: ["٣٥", "٣٧", "٣٨"],
+        answer: "٣٧"
+        }
+    },
+    {
+        en: {
         text: `<strong>If: "All A are B" and "Some B are not C"</strong><br>Can we conclude "Some A are not C"?`,
         options: ["Yes", "No", "Uncertain"],
         answer: "Yes"
-      },
-      {
+        },
+        ar: {
+        text: `<strong>إذا:</strong><br><strong>"كل أ هي ب"</strong><br><strong>"بعض ب ليست ج"</strong><br><strong>هل نستنتج أن "بعض أ ليست ج"؟</strong>`,
+        options: ["نعم", "لا", "غير مؤكد"],
+        answer: "نعم"
+        }
+    },
+    {
+        en: {
         text: "<strong>Which symbol completes the sequence?</strong><br>⚫, ⚪, ⬛, ⬜, 🔳, ___",
         options: ["🔲", "⚫", "⬛"],
         answer: "⚫"
-      },
-      {
+        },
+        ar: {
+        text: "<strong>أي رمز يكمل التسلسل؟</strong><br>⚫، ⚪، ⬛، ⬜، 🔳، ___",
+        options: ["🔲", "⚫", "⬛"],
+        answer: "⚫"
+        }
+    },
+    {
+        en: {
         text: "<strong>Which 3D structure is impossible to be present in geometry?</strong>",
         options: [
-          { label: "Penrose triangle", image: "images/penrose_triangle.png" },
-          { label: "Regular icosahedron", image: "images/icosahedron.png" },
-          { label: "Möbius strip", image: "images/mobius_strip.png" }
+            { label: "Penrose triangle", image: "images/penrose_triangle.png" },
+            { label: "Regular icosahedron", image: "images/icosahedron.png" },
+            { label: "Möbius strip", image: "images/mobius_strip.png" }
         ],
         answer: "Penrose triangle"
-      },
-      {
+        },
+        ar: {
+        text: "<strong>أي شكل ثلاثي الأبعاد مستحيل الوجود؟</strong>",
+        options: [
+            { label: "مثلث بينروز", image: "images/penrose_triangle.png" },
+            { label: "عشروني الوجوه المنتظم", image: "images/icosahedron.png" },
+            { label: "شريط موبيوس", image: "images/mobius_strip.png" }
+        ],
+        answer: "مثلث بينروز"
+        }
+    },
+    {
+        en: {
         text: "<strong>What is the Antonym of \"Ephemeral\"?</strong>",
         options: ["Fleeting", "Perpetual", "Fragile"],
         answer: "Perpetual"
-      },
-      {
-        text: "<strong>Cryptography is to Encryption as Biology is to...</strong>",
+        },
+        ar: {
+        text: "<strong>ما هو نقيض \"عابر\"؟</strong>",
+        options: ["زائل", "دائم", "هش"],
+        answer: "دائم"
+        }
+    },
+    {
+        en: {
+        text: `<strong>Cryptography is to Encryption as Biology is to...</strong>`,
         options: ["Taxonomy", "Photosynthesis", "Mitosis"],
         answer: "Mitosis"
-      },
-      {
+        },
+        ar: {
+        text: `<strong>علم التشفير بالنسبة للتشفير كما أن علم الأحياء بالنسبة إلى...</strong>`,
+        options: ["التصنيف", "التمثيل الضوئي", "الانقسام"],
+        answer: "الانقسام"
+        }
+    },
+    {
+        en: {
         text: `Visual Memory Challenge<br><strong>Memorize this 3×3 symbol grid for 15 seconds (you will be asked to Recall it at Q10):</strong><br>
-          <div class="symbol-grid">
+            <div class="symbol-grid">
             <div>◐</div><div>◑</div><div>◒</div>
             <div>◓</div><div>◐</div><div>◑</div>
             <div>◒</div><div>◓</div><div>◐</div>
-          </div>`,
+            </div>`,
         options: [],
         answer: null
-      },
-      {
+        },
+        ar: {
+        text: `تحدي الذاكرة البصرية<br><strong>احفظ شبكة الرموز هذه لمدة 15 ثانية (ستُسأل عنها في السؤال 10):</strong><br>
+            <div class="symbol-grid">
+            <div>◐</div><div>◑</div><div>◒</div>
+            <div>◓</div><div>◐</div><div>◑</div>
+            <div>◒</div><div>◓</div><div>◐</div>
+            </div>`,
+        options: [],
+        answer: null
+        }
+    },
+    {
+        en: {
         text: "<strong>What is the next corresponding word?</strong><br>Sonar : Sound :: Lidar : ?",
         options: ["Light", "Lasers", "Radiation"],
         answer: "Lasers"
-      },
-      {
+        },
+        ar: {
+        text: "<strong>ما هي الكلمة التالية؟</strong><br>السونار : الصوت :: الليدار : ؟",
+        options: ["الضوء", "الليزر", "الإشعاع"],
+        answer: "الليزر"
+        }
+    },
+    {
+        en: {
         text: "<strong>Guess the final number:</strong><br>1, 11, 21, 1211, 111221, ?",
         options: ["312211", "13112221", "12311321"],
         answer: "312211"
-      },
-      {
+        },
+        ar: {
+        text: "<strong>احزر العدد التالي:</strong><br>١، ١١، ٢١، ١٢١١، ١١١٢٢١، ؟",
+        options: ["٣١٢٢١١", "١٣١١٢٢٢١", "١٢٣١١٣٢١"],
+        answer: "٣١٢٢١١"
+        }
+    },
+    {
+        en: {
         text: `<strong>Which symbol fills the blank?</strong><br>
         <div class="triangle-grid">
-          <div>◤</div><div>◥</div><div>◣</div>
-          <div>◢</div><div>?</div><div>◤</div>
-          <div>◣</div><div>◢</div><div>◥</div>
+            <div>◤</div><div>◥</div><div>◣</div>
+            <div>◢</div><div>?</div><div>◤</div>
+            <div>◣</div><div>◢</div><div>◥</div>
         </div>`,
         options: ["◣", "◢", "◥"],
         answer: "◣"
-      },
-      {
+        },
+        ar: {
+        text: `<strong>أي رمز يكمل الفراغ؟</strong><br>
+        <div class="triangle-grid">
+            <div>◤</div><div>◥</div><div>◣</div>
+            <div>◢</div><div>؟</div><div>◤</div>
+            <div>◣</div><div>◢</div><div>◥</div>
+        </div>`,
+        options: ["◣", "◢", "◥"],
+        answer: "◣"
+        }
+    },
+    {
+        en: {
         text: "<strong>From Q6’s grid, what symbol is at row 2, column 3?</strong>",
         options: ["◒", "◑", "◐"],
         answer: "◑"
-      }
+        },
+        ar: {
+        text: "<strong>من شبكة السؤال ٦، ما الرمز الموجود في الصف ٢، العمود ٣؟</strong>",
+        options: ["◒", "◑", "◐"],
+        answer: "◑"
+        }
+    }
     ];
 
     let current = 0;
@@ -242,35 +339,48 @@
     }
 
     function showQuestion() {
-      const q = questions[current];
-      questionEl.innerHTML = `<div class="question">${q.text}</div>`;
-      if (q.image) {
-        questionEl.innerHTML += `<img class='question-img' src="${q.image}" alt="Question image" />`;
-      }
-      optionsEl.innerHTML = "";
-      q.options.forEach(option => {
-        const btn = document.createElement("button");
-        if (typeof option === 'object') {
-          btn.innerHTML = `
-            <div>
-              <img class="option-img" src="${option.image}" alt="${option.label}" />
-              <div>${option.label}</div>
-            </div>
-          `;
-          btn.dataset.value = option.label;
-        } else {
-          btn.textContent = option;
-          btn.dataset.value = option;
-        }
-        btn.onclick = () => {
-          clearInterval(timer);
-          userAnswers.push(btn.dataset.value);
-          nextQuestion();
-        };
-        optionsEl.appendChild(btn);
-      });
-      startTimer();
+        const q = questions[current][language];
+        
+        // Set direction for Arabic
+        const direction = language === "ar" ? "rtl" : "ltr";
+        const align = language === "ar" ? "right" : "left";
+
+        // Show question text
+        questionEl.innerHTML = `<div class="question" style="direction: ${direction}; text-align: ${align};">${q.text}</div>`;
+
+        // Clear previous options
+        optionsEl.innerHTML = "";
+
+        // Render options (text or image+label)
+        q.options.forEach(option => {
+            const btn = document.createElement("button");
+
+            if (typeof option === "object") {
+            // If option includes an image
+            btn.innerHTML = `
+                <div style="direction: ${direction}; text-align: ${align};">
+                <img class="option-img" src="${option.image}" alt="${option.label}" />
+                <div>${option.label}</div>
+                </div>
+            `;
+            btn.dataset.value = option.label;
+            } else {
+            btn.textContent = option;
+            btn.dataset.value = option;
+            }
+
+            btn.onclick = () => {
+            clearInterval(timer);
+            userAnswers.push(btn.dataset.value);
+            nextQuestion();
+            };
+
+            optionsEl.appendChild(btn);
+        });
+
+        startTimer();
     }
+
 
     function nextQuestion() {
       current++;
@@ -282,27 +392,49 @@
     }
 
     function showResults() {
-      document.getElementById("quiz").classList.add("hidden");
-      let score = 0;
-      let output = "<h2>Results:</h2><ul>";
-      questions.forEach((q, i) => {
-        if (!q.answer) return;
-        const user = userAnswers[i] || "(No answer)";
-        const correct = q.answer;
-        const correctText = user === correct ? "✅" : "❌";
-        if (user === correct) score++;
-        output += `<li>${q.text}<br>Your answer: ${user}<br>Correct answer: ${correct} ${correctText}</li><br>`;
-      });
-      output += `</ul><h3>Your score: ${score} / ${questions.filter(q => q.answer).length}</h3>`;
-      resultEl.innerHTML = output;
-      resultEl.classList.remove("hidden");
+        document.getElementById("quiz").classList.add("hidden");
+
+        let score = 0;
+        const direction = language === "ar" ? "rtl" : "ltr";
+        const align = language === "ar" ? "right" : "left";
+
+        let output = `<div style="direction: ${direction}; text-align: ${align};"><h2>${language === "ar" ? "النتائج:" : "Results:"}</h2><ul>`;
+
+        questions.forEach((q, i) => {
+            const qData = q[language];
+            const user = userAnswers[i] || (language === "ar" ? "(لا إجابة)" : "(No answer)");
+            const correct = qData.answer;
+            const correctMark = user === correct ? "✅" : "❌";
+
+            if (correct !== null) {
+            if (user === correct) score++;
+            output += `<li style="margin-bottom: 1rem;">${qData.text}<br>
+                ${language === "ar" ? "إجابتك" : "Your answer"}: ${user}<br>
+                ${language === "ar" ? "الإجابة الصحيحة" : "Correct answer"}: ${correct} ${correctMark}</li>`;
+            }
+        });
+
+        const total = questions.filter(q => q[language].answer !== null).length;
+        output += `</ul><h3>${language === "ar" ? "درجتك" : "Your score"}: ${score} / ${total}</h3></div>`;
+
+        resultEl.innerHTML = output;
+        resultEl.classList.remove("hidden");
     }
 
+
     preloadImages(() => {
-      document.getElementById("start-button").addEventListener("click", () => {
+      document.getElementById("start-english").addEventListener("click", () => {
+        language = "en";
         document.getElementById("start-screen").classList.add("hidden");
         document.getElementById("quiz").classList.remove("hidden");
         showQuestion();
+      });
+
+      document.getElementById("start-arabic").addEventListener("click", () => {
+        language = "ar";
+        document.getElementById("start-screen").classList.add("hidden");
+        document.getElementById("quiz").classList.remove("hidden");
+        showQuestion(); // you’ll localize questions later
       });
     });
   </script>
